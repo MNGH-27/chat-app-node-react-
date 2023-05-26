@@ -5,6 +5,14 @@ const http = require("http");
 //import app(express()) from  app.js
 const app = require("./app");
 
+//import Databse
+const mongoDB = require("./app/config/database");
+
+//run mongoDB function
+mongoDB();
+
+//// - - - -----------------mongoDB
+
 const PORT = process.env.PORT || 5000;
 
 //create server on app
