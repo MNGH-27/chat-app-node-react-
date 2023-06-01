@@ -6,10 +6,11 @@ import ChatAppButton from "./../../../../components/util/button";
 
 //svg
 import { ReactComponent as GoogleSvg } from "./../../../../assets/svg/google.svg";
+import { LoginUser } from "../../../../service/auth";
 
-export default function Login() {
+export default function Login({ onToggleHandler }) {
   const [dataScheam, setDataScheama] = useState({
-    userName: "",
+    name: "",
     password: "",
   });
 
@@ -20,6 +21,15 @@ export default function Login() {
     }));
   };
 
+  const httpOnLoginUserHandler = async () => {
+    try {
+      const response = await LoginUser({ ...dataScheam });
+      console.log("response : ", response);
+    } catch (error) {
+      console.log("error in login user :", error);
+    }
+  };
+
   return (
     <div className="relative z-20 flex items-center justify-center flex-col max-w-sm sm:mx-auto mx-5 mt-10">
       <p className="text-xl font-medium">Welocome back to the chat</p>
@@ -27,9 +37,9 @@ export default function Login() {
 
       <div className="flex flex-col gap-4 mt-6 w-full">
         <ChatAppInput
-          value={dataScheam.userName}
+          value={dataScheam.name}
           title={"username"}
-          target="userName"
+          target="name"
           placeholder={"ex:mngh-27"}
           type={"text"}
           onChangeDataHandler={onSetDataScheamHandler}
@@ -44,7 +54,11 @@ export default function Login() {
         />
       </div>
       <div className="w-full flex flex-col gap-4 mt-6 mb-2">
-        <ChatAppButton bgColor={"#006CFF"} textColor={"#fff"}>
+        <ChatAppButton
+          clickHandler={httpOnLoginUserHandler}
+          bgColor={"#006CFF"}
+          textColor={"#fff"}
+        >
           Log in
         </ChatAppButton>
         <button className="flex items-center justify-center gap-2 w-full text-white py-2 rounded-3xl text-lg font-semibold border-2 duration-200">
@@ -55,9 +69,9 @@ export default function Login() {
 
       <p className="text-[#A6ABBD] font-semibold text-lg">
         Don't have an account,{" "}
-        <a className="text-[#006CFF]" href="/">
+        <button onClick={onToggleHandler} className="text-[#006CFF]">
           sign up for free
-        </a>
+        </button>
       </p>
     </div>
   );

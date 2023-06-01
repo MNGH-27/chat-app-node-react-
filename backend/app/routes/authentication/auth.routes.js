@@ -1,19 +1,20 @@
-const express = require("express");
+var express = require("express");
+var router = express.Router();
+var jwt = require("express-jwt");
 
-//controller
-const authController = require("./../../controller/authentication/auth.controller");
+var auth = jwt.expressjwt({
+  secret: process.env.JWT_SECRET,
+  algorithms: ["HS256"],
+});
 
-//define router
-const authRouter = express.Router();
+// var ctrlProfile = require("../controllers/profile");
+var ctrlAuth = require("./../../controller/authentication/auth.controller");
 
-/**
- * ! end point  :> /
- *
- * @ routes :>
- *
- *
-/*/
+// profile
+router.get("/profile", auth, ctrlAuth.profileRead);
 
-authRouter.post("/", authController.Signup);
+// authentication
+router.post("/signup", ctrlAuth.register);
+router.post("/login", ctrlAuth.login);
 
-module.exports = authRouter;
+module.exports = router;
