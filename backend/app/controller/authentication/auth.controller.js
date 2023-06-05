@@ -22,13 +22,18 @@ module.exports.register = async function (req, res) {
 
   if (error) {
     //return sepreted error to user
-    return res.status(400).send(errorMessageSeparator(error.details));
+    return res
+      .status(400)
+      .send({ message: errorMessageSeparator(error.details) });
   }
 
   const user = new User(value.name, value.email, value.password);
 
   try {
     const response = await user.createNewUser();
+
+    // Save token in a cookie with a name of "token"
+    res.cookie("token", response.token, { maxAge: 900000, httpOnly: true });
 
     return res.status(201).send({
       ...response,
@@ -38,6 +43,8 @@ module.exports.register = async function (req, res) {
     if (error.code === 11000) {
       return res.status(400).send(duplicateValues(error));
     }
+
+    console.log("error : ", error);
 
     return res.status(500).send({
       message: error || "error in create new user",
@@ -73,6 +80,10 @@ module.exports.login = function (req, res) {
     // If a user is found
     if (user) {
       token = User.generateJwt(user._id, user.email, user.name);
+
+      // Save token in a cookie with a name of "token"
+      res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+
       res.status(200);
       res.json({
         id: user._id,
@@ -87,16 +98,33 @@ module.exports.login = function (req, res) {
   })(req, res);
 };
 
-module.exports.profileRead = function (req, res) {
-  console.log("come here");
+module.exports.googleRegisteration = async function (req, res) {
+  console.log("in google authentication");
+  passport.authenticate("google", { scope: ["email", "profile"] });
+};
 
-  if (!req.payload._id) {
-    res.status(401).json({
-      message: "UnauthorizedError: private profile",
-    });
-  } else {
-    User.findById(req.payload._id).exec(function (err, user) {
-      res.status(200).json(user);
-    });
-  }
+module.exports.googleRegisterCallback = async function (req, res) {
+  //register callback redirect
+  console.log("in google callback");
+
+  passport.authenticate("google", {
+    successRedirect: "/auth/google/success",
+    failureRedirect: "/auth/google/failure",
+  });
+};
+
+module.exports.googleRegisterSuccess = function (req, res) {
+  console.log("in google register succesfuly");
+
+  res.send({
+    message: "google authentication successed",
+  });
+};
+
+module.exports.googleRegisterFailure = async function (req, res) {
+  console.log("in google register failed");
+
+  res.send({
+    message: "google authentication failed",
+  });
 };

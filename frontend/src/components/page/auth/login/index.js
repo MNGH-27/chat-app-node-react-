@@ -3,16 +3,18 @@ import React, { useState } from "react";
 //component - util
 import ChatAppInput from "./../../../../components/util/input";
 import ChatAppButton from "./../../../../components/util/button";
-
+//service
+import { GoogleAuthentication, LoginUser } from "../../../../service/auth";
 //svg
 import { ReactComponent as GoogleSvg } from "./../../../../assets/svg/google.svg";
-import { LoginUser } from "../../../../service/auth";
 
 export default function Login({ onToggleHandler }) {
+  //data schema
   const [dataScheam, setDataScheama] = useState({
     name: "",
     password: "",
   });
+  const [error, setError] = useState({});
 
   const onSetDataScheamHandler = (target, value) => {
     setDataScheama((prevState) => ({
@@ -23,10 +25,46 @@ export default function Login({ onToggleHandler }) {
 
   const httpOnLoginUserHandler = async () => {
     try {
-      const response = await LoginUser({ ...dataScheam });
+      const response = await LoginUser({
+        ...dataScheam,
+      });
+
+      if (response.status === 201) {
+        /**
+         * TODO:Navigate to dashboard page
+         */
+      } else if (response.status === 400) {
+        /**
+         * TODO:Create Toast to show Error we have
+         */
+
+        if (typeof response.data.message === "string") {
+          /**
+           * TODO:Create toast to show the error message as string in toast
+           */
+        } else {
+          //entred inputs are wrong add it to error data to show to user
+          setError({
+            ...response.data.message,
+          });
+        }
+      } else {
+        /**
+         * TODO:Handle More Status Code Errors
+         */
+      }
+    } catch (error) {
+      console.log("error in login error:> \n", error);
+    }
+  };
+
+  const httpGoogleAuthentication = async () => {
+    try {
+      const response = await GoogleAuthentication();
+
       console.log("response : ", response);
     } catch (error) {
-      console.log("error in login user :", error);
+      console.log("error in google authentication\n : ", error);
     }
   };
 
@@ -42,6 +80,7 @@ export default function Login({ onToggleHandler }) {
           target="name"
           placeholder={"ex:mngh-27"}
           type={"text"}
+          error={error.name}
           onChangeDataHandler={onSetDataScheamHandler}
         />
         <ChatAppInput
@@ -50,6 +89,7 @@ export default function Login({ onToggleHandler }) {
           target="password"
           placeholder={"enter your password"}
           type={"password"}
+          error={error.password}
           onChangeDataHandler={onSetDataScheamHandler}
         />
       </div>
@@ -61,7 +101,10 @@ export default function Login({ onToggleHandler }) {
         >
           Log in
         </ChatAppButton>
-        <button className="flex items-center justify-center gap-2 w-full text-white py-2 rounded-3xl text-lg font-semibold border-2 duration-200">
+        <button
+          onClick={httpGoogleAuthentication}
+          className="flex items-center justify-center gap-2 w-full text-white py-2 rounded-3xl text-lg font-semibold border-2 duration-200"
+        >
           <GoogleSvg />
           Log in with Google
         </button>

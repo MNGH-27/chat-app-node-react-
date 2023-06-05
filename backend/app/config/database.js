@@ -8,8 +8,6 @@ if (process.env.NODE_ENV === "production") {
   dbURI = process.env.MONGOLAB_URI;
 }
 
-console.log("in mongoose DB");
-
 mongoose.connect(dbURI);
 
 // CONNECTION EVENTS
@@ -49,6 +47,3 @@ process.on("SIGTERM", function () {
     process.exit(0);
   });
 });
-
-// // BRING IN YOUR SCHEMAS & MODELS
-// require("./../models/user/user.model");

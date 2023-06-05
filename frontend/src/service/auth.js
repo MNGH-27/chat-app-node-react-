@@ -21,8 +21,8 @@ export async function LoginUser({ password, name }) {
   return apiCall;
 }
 
-export async function CheckNetwork() {
-  const apiCall = await useFetch().get(`${endPoint}/profile`);
+export async function GoogleAuthentication() {
+  const apiCall = await useFetch().post(`${endPoint}/google`);
 
   return apiCall;
 }

@@ -11,11 +11,13 @@ import { SignupUser } from "../../../../service/auth";
 import { ReactComponent as GoogleSvg } from "./../../../../assets/svg/google.svg";
 
 export default function Signup({ onToggleHandler }) {
+  //data
   const [dataScheam, setDataScheama] = useState({
     name: "",
     email: "",
     password: "",
   });
+  const [error, setError] = useState({});
 
   const onSetDataScheamHandler = (target, value) => {
     setDataScheama((prevState) => ({
@@ -30,7 +32,19 @@ export default function Signup({ onToggleHandler }) {
         ...dataScheam,
       });
 
-      console.log("resposne : ", response);
+      if (response.status === 201) {
+        /**
+         * TODO:Navigate to dashboard page
+         */
+      } else if (response.status === 400) {
+        /**
+         * TODO:Create Toast to show Error we have
+         */
+        setError({
+          ...response.data.message,
+        });
+      } else {
+      }
     } catch (error) {
       console.log("error in signup error:> \n", error);
     }
@@ -48,6 +62,7 @@ export default function Signup({ onToggleHandler }) {
           target="name"
           placeholder={"ex:mngh-27"}
           type={"text"}
+          error={error.name}
           onChangeDataHandler={onSetDataScheamHandler}
         />
         <ChatAppInput
@@ -56,6 +71,7 @@ export default function Signup({ onToggleHandler }) {
           target="email"
           placeholder={"ex:admin@gmail.com"}
           type={"email"}
+          error={error.email}
           onChangeDataHandler={onSetDataScheamHandler}
         />
         <ChatAppInput
@@ -64,6 +80,7 @@ export default function Signup({ onToggleHandler }) {
           target="password"
           placeholder={"enter your password"}
           type={"password"}
+          error={error.password}
           onChangeDataHandler={onSetDataScheamHandler}
         />
       </div>

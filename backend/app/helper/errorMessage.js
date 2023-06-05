@@ -1,8 +1,8 @@
 function errorMessageSeparator(details) {
-  let errorMessage = [];
+  let errorMessage = {};
 
   details.forEach((singleError) => {
-    errorMessage.push(singleError.message);
+    errorMessage[singleError.path[0]] = singleError.message;
   });
 
   return errorMessage;

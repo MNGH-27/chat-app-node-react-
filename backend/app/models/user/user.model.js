@@ -38,7 +38,11 @@ class user {
         })
         .then((response) => {
           //create token for created user
-          const token = generateJwt(response.id, response.name, response.email);
+          const token = user.generateJwt(
+            response.id,
+            response.name,
+            response.email
+          );
 
           //return result as response
           res({
