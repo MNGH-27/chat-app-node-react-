@@ -1,6 +1,3 @@
-// const session = require("express-session");
-// var path = require("path");
-
 const express = require("express");
 
 //REQIURE INSTALLED MIDDLE WARES
@@ -10,10 +7,12 @@ var bodyParser = require("body-parser");
 const passport = require("passport");
 const cookieParser = require("cookie-parser");
 
+//custom middleware
+const authenticatedMiddleWare = require("./app/middleware/authentication.middleware");
+
 //creat app
 const app = express();
-
-//import custome data
+//import api
 const api = require("./app/routes/api.routes");
 
 //[SH] DEFINE MODAL IN APP.JS
@@ -51,44 +50,8 @@ app.use((req, res, next) => {
 // [SH] Initialise Passport before using the route middleware
 app.use(passport.initialize());
 
-// catch 404 and forward to error handler
-// app.use(function (req, res, next) {
-//   var err = new Error("Not Found");
-//   err.status = 404;
-//   next(err);
-// });
-// error handlers
-
-// [SH] Catch unauthorised errors
-// app.use(function (err, req, res, next) {
-//   if (err.name === "UnauthorizedError") {
-//     res.status(401);
-//     res.json({ message: err.name + ": " + err.message });
-//   }
-//   next();
-// });
-
-// development error handler
-// will print stacktrace
-// if (app.get("env") === "development") {
-//   app.use(function (err, req, res, next) {
-//     res.status(err.status || 500);
-//     res.render("error", {
-//       message: err.message,
-//       error: err,
-//     });
-//   });
-// }
-
-// production error handler
-// no stacktraces leaked to user
-// app.use(function (err, req, res, next) {
-//   res.status(err.status || 500);
-//   res.render("error", {
-//     message: err.message,
-//     error: {},
-//   });
-// });
+//custom middleware
+app.use(authenticatedMiddleWare);
 
 //ADD ROUTER =: API OF V1
 app.use("/v1", api);

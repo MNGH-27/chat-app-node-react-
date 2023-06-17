@@ -2,11 +2,6 @@ var express = require("express");
 var router = express.Router();
 var jwt = require("express-jwt");
 
-var auth = jwt.expressjwt({
-  secret: process.env.JWT_SECRET,
-  algorithms: ["HS256"],
-});
-
 // var ctrlProfile = require("../controllers/profile");
 var ctrlAuth = require("./../../controller/authentication/auth.controller");
 
