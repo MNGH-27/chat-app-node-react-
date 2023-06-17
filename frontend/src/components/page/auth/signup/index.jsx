@@ -1,17 +1,20 @@
 import React, { useState } from "react";
 
 //component - util
-import ChatAppInput from "./../../../../components/util/input";
-import ChatAppButton from "./../../../../components/util/button";
+import ChatAppInput from "../../../util/input";
+import ChatAppButton from "../../../util/button";
+
 //service
-import { GoogleAuthentication, LoginUser } from "../../../../service/auth";
+import { SignupUser } from "../../../../service/auth";
+
 //svg
 import { ReactComponent as GoogleSvg } from "./../../../../assets/svg/google.svg";
 
-export default function Login({ onToggleHandler }) {
-  //data schema
+export default function Signup({ onToggleHandler }) {
+  //data
   const [dataScheam, setDataScheama] = useState({
     name: "",
+    email: "",
     password: "",
   });
   const [error, setError] = useState({});
@@ -23,9 +26,9 @@ export default function Login({ onToggleHandler }) {
     }));
   };
 
-  const httpOnLoginUserHandler = async () => {
+  const httpSignupRequest = async () => {
     try {
-      const response = await LoginUser({
+      const response = await SignupUser({
         ...dataScheam,
       });
 
@@ -37,34 +40,13 @@ export default function Login({ onToggleHandler }) {
         /**
          * TODO:Create Toast to show Error we have
          */
-
-        if (typeof response.data.message === "string") {
-          /**
-           * TODO:Create toast to show the error message as string in toast
-           */
-        } else {
-          //entred inputs are wrong add it to error data to show to user
-          setError({
-            ...response.data.message,
-          });
-        }
+        setError({
+          ...response.data.message,
+        });
       } else {
-        /**
-         * TODO:Handle More Status Code Errors
-         */
       }
     } catch (error) {
-      console.log("error in login error:> \n", error);
-    }
-  };
-
-  const httpGoogleAuthentication = async () => {
-    try {
-      const response = await GoogleAuthentication();
-
-      console.log("response : ", response);
-    } catch (error) {
-      console.log("error in google authentication\n : ", error);
+      console.log("error in signup error:> \n", error);
     }
   };
 
@@ -72,7 +54,6 @@ export default function Login({ onToggleHandler }) {
     <div className="relative z-20 flex items-center justify-center flex-col max-w-sm sm:mx-auto mx-5 mt-10">
       <p className="text-xl font-medium">Welocome back to the chat</p>
       <p className="text-[#A6ABBD]">please enter your detail</p>
-
       <div className="flex flex-col gap-4 mt-6 w-full">
         <ChatAppInput
           value={dataScheam.name}
@@ -81,6 +62,15 @@ export default function Login({ onToggleHandler }) {
           placeholder={"ex:mngh-27"}
           type={"text"}
           error={error.name}
+          onChangeDataHandler={onSetDataScheamHandler}
+        />
+        <ChatAppInput
+          value={dataScheam.email}
+          title={"email"}
+          target="email"
+          placeholder={"ex:admin@gmail.com"}
+          type={"email"}
+          error={error.email}
           onChangeDataHandler={onSetDataScheamHandler}
         />
         <ChatAppInput
@@ -93,23 +83,20 @@ export default function Login({ onToggleHandler }) {
           onChangeDataHandler={onSetDataScheamHandler}
         />
       </div>
+
       <div className="w-full flex flex-col gap-4 mt-6 mb-2">
         <ChatAppButton
-          clickHandler={httpOnLoginUserHandler}
+          clickHandler={httpSignupRequest}
           bgColor={"#006CFF"}
           textColor={"#fff"}
         >
-          Log in
+          Sign Up
         </ChatAppButton>
-        <button
-          onClick={httpGoogleAuthentication}
-          className="flex items-center justify-center gap-2 w-full text-white py-2 rounded-3xl text-lg font-semibold border-2 duration-200"
-        >
+        <button className="flex items-center justify-center gap-2 w-full text-white py-2 rounded-3xl text-lg font-semibold border-2 duration-200">
           <GoogleSvg />
           Log in with Google
         </button>
       </div>
-
       <p className="text-[#A6ABBD] font-semibold text-lg">
         Don't have an account,{" "}
         <button onClick={onToggleHandler} className="text-[#006CFF]">

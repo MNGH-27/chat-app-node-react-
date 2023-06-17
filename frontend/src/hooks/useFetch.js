@@ -28,9 +28,8 @@ const AxiosInstance = (route = null) => {
         toast.warn("500 Internet server Error", {
           toastId: "id-code-500",
         });
-
-        console.log("process : ", window.location.href);
       }
+
       //check status code with backend to handler it
       else if (error.response.status === 400) {
         toast.warn(error.response.message, {
@@ -40,10 +39,24 @@ const AxiosInstance = (route = null) => {
       }
       //check status code with backend if user has token
       else if (error.response.status === 401) {
-        route("/");
+        //user doesn't have token,
+        //redirect to signin/signup page
+        route("/auth");
         return error.response;
       }
+      //check status code with backend if user is Forbidden
+      else if (error.response.status === 403) {
+        //user doesn't premission to come to this page
 
+        //clear token from cookie
+        document.cookie =
+          "token=;expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+        //redirect to auth page
+        route("/auth");
+
+        return error.response;
+      }
       return error.response;
     }
   );
