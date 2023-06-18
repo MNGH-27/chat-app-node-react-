@@ -8,7 +8,7 @@ const authRouter = require("./authentication/auth.routes");
 const api = express.Router();
 
 //app router
-// api.use("/user", userRouter);
+api.use("/user", userRouter);
 api.use("/auth", authRouter);
 
 module.exports = api;

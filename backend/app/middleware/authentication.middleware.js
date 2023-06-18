@@ -13,6 +13,7 @@ function CheckJWT(req, res, next) {
   try {
     //decoding token which is sent
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
     //there was no problem in decoding token => add to user in request
     req.user = decoded;
     //go to next middle ware

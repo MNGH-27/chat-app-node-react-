@@ -14,6 +14,6 @@ const userRouter = express.Router();
  *
  */
 
-// userRouter.use("/", userController.getid);
+userRouter.use("/", userController.GetUser);
 
 module.exports = userRouter;

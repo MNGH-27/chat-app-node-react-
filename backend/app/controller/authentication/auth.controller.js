@@ -33,7 +33,11 @@ module.exports.register = async function (req, res) {
     const response = await user.createNewUser();
 
     // Save token in a cookie with a name of "token"
-    res.cookie("token", response.token, { maxAge: 900000, httpOnly: true });
+    res.cookie("token", response.token, {
+      //set age of cookie for one week (7 days)
+      maxAge: 7 * 24 * 60 * 60 * 1000,
+      httpOnly: true,
+    });
 
     return res.status(201).send({
       ...response,
@@ -41,7 +45,8 @@ module.exports.register = async function (req, res) {
   } catch (error) {
     //check error
     if (error.code === 11000) {
-      return res.status(400).send(duplicateValues(error));
+      //error is duplicated values => return items which is duplicated
+      return res.status(400).send({ message: duplicateValues(error) });
     }
 
     console.log("error : ", error);
@@ -79,12 +84,16 @@ module.exports.login = function (req, res) {
 
     // If a user is found
     if (user) {
-      token = User.generateJwt(user._id, user.email, user.name);
+      token = User.generateJwt(user._id, user.email, user.name, user.role);
 
       // Save token in a cookie with a name of "token"
-      res.cookie("token", token, { maxAge: 900000, httpOnly: true });
+      res.cookie("token", token, {
+        //set age of cookie for one week (7 days)
+        maxAge: 7 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+      });
 
-      res.status(200);
+      res.status(201);
       res.json({
         id: user._id,
         email: user.email,

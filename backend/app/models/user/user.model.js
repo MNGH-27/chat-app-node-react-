@@ -41,7 +41,8 @@ class user {
           const token = user.generateJwt(
             response.id,
             response.name,
-            response.email
+            response.email,
+            response.role
           );
 
           //return result as response
@@ -75,6 +76,7 @@ class user {
     );
   }
 
+  //use in passport.js
   static async GetSingleUserByName(name) {
     return await new Promise((res, rej) =>
       userSchema
@@ -96,7 +98,7 @@ class user {
     return userHash === hash;
   }
 
-  static generateJwt(id, email, name) {
+  static generateJwt(id, email, name, role) {
     var expiry = new Date();
     expiry.setDate(expiry.getDate() + 7);
 
@@ -105,14 +107,13 @@ class user {
         _id: id,
         email: email,
         name: name,
+        role: role,
         exp: parseInt(expiry.getTime() / 1000),
       },
       process.env.JWT_SECRET
     ); // DO NOT KEEP YOUR SECRET IN THE CODE!
   }
-
-  static async loginUserHandler() {}
-}
+} //end of user class
 
 //create password in private function
 function setPassword(password) {

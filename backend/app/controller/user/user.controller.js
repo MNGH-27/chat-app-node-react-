@@ -1,6 +1,7 @@
 function GetUser(req, res) {
-  res.send({
-    message: "this is test for checking middle ware in user",
+  //here we get data from token in cookie
+  res.status(200).send({
+    ...req.user,
   });
 }
 

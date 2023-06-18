@@ -11,11 +11,15 @@ function errorMessageSeparator(details) {
 function duplicateValues(error) {
   const objectKeys = Object.keys(error.keyPattern);
 
-  return objectKeys.map((singleKey) => {
-    return {
-      [singleKey]: "The entered value is duplicated",
-    };
+  //initial object of duplicatedValues
+  const duplicatedValues = {};
+
+  //loop on item which are duplicated
+  objectKeys.forEach((singleObj) => {
+    duplicatedValues[singleObj] = "The entered value is duplicated";
   });
+
+  return duplicatedValues;
 }
 
 module.exports = { duplicateValues, errorMessageSeparator };
