@@ -4,14 +4,22 @@ import React, { useState } from "react";
 import ChatAppInput from "../../../util/input";
 import ChatAppButton from "../../../util/button";
 
+//react router dom
+import { useNavigate } from "react-router-dom";
+
 //service
 import { SignupUser } from "../../../../service/auth";
 
 //svg
 import { ReactComponent as GoogleSvg } from "./../../../../assets/svg/google.svg";
+import { toast } from "react-toastify";
 
 export default function Signup({ onToggleHandler }) {
+  //navigate
+  const navigate = useNavigate();
+
   //data
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [dataScheam, setDataScheama] = useState({
     name: "",
     email: "",
@@ -27,27 +35,32 @@ export default function Signup({ onToggleHandler }) {
   };
 
   const httpSignupRequest = async () => {
+    setIsBtnLoading(true);
+
     try {
-      const response = await SignupUser({
+      const response = await SignupUser(navigate, {
         ...dataScheam,
       });
 
       if (response.status === 201) {
-        /**
-         * TODO:Navigate to dashboard page
-         */
+        navigate("/chat");
       } else if (response.status === 400) {
-        /**
-         * TODO:Create Toast to show Error we have
-         */
+        toast.error("there was error while sign up");
         setError({
           ...response.data.message,
         });
       } else {
+        /**
+         * !Error in sending signup
+         */
+
+        console.log("signup error => status code : ", response.status);
       }
     } catch (error) {
       console.log("error in signup error:> \n", error);
     }
+
+    setIsBtnLoading(false);
   };
 
   return (
@@ -86,6 +99,7 @@ export default function Signup({ onToggleHandler }) {
 
       <div className="w-full flex flex-col gap-4 mt-6 mb-2">
         <ChatAppButton
+          isLoading={isBtnLoading}
           clickHandler={httpSignupRequest}
           bgColor={"#006CFF"}
           textColor={"#fff"}
@@ -98,9 +112,9 @@ export default function Signup({ onToggleHandler }) {
         </button>
       </div>
       <p className="text-[#A6ABBD] font-semibold text-lg">
-        Don't have an account,{" "}
+        Do you have account ? ,{" "}
         <button onClick={onToggleHandler} className="text-[#006CFF]">
-          sign up for free
+          login to account
         </button>
       </p>
     </div>

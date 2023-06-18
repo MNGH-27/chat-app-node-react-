@@ -6,6 +6,7 @@ export default function ChatAppButton({
   textColor,
   bgColor,
   clickHandler,
+  btnContainerClass,
 }) {
   const [isHover, setIsHover] = useState(false);
 
@@ -26,7 +27,7 @@ export default function ChatAppButton({
       onMouseEnter={() => setIsHover(true)}
       onMouseLeave={() => setIsHover(false)}
       style={isHover ? hoverClass : unHoverClass}
-      className={`w-full py-2 rounded-3xl text-lg font-semibold border-2 duration-200 flex items-center justify-center`}
+      className={`${btnContainerClass} w-full py-2 rounded-3xl text-lg font-semibold border-2 duration-200 flex items-center justify-center`}
     >
       {isLoading ? (
         <div role="status">

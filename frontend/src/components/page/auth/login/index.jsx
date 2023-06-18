@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 
+//react toastify
+import { toast } from "react-toastify";
+
+//react router dom
+import { useNavigate } from "react-router-dom";
+
 //component - util
 import ChatAppInput from "../../../util/input";
 import ChatAppButton from "../../../util/button";
+
 //service
 import { GoogleAuthentication, LoginUser } from "../../../../service/auth";
+
 //svg
 import { ReactComponent as GoogleSvg } from "./../../../../assets/svg/google.svg";
 
 export default function Login({ onToggleHandler }) {
+  //navigate
+  const navigate = useNavigate();
+
   //data schema
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
   const [dataScheam, setDataScheama] = useState({
     name: "",
     password: "",
@@ -24,38 +36,32 @@ export default function Login({ onToggleHandler }) {
   };
 
   const httpOnLoginUserHandler = async () => {
+    setIsBtnLoading(true);
+
     try {
-      const response = await LoginUser({
+      const response = await LoginUser(navigate, {
         ...dataScheam,
       });
 
       if (response.status === 201) {
-        /**
-         * TODO:Navigate to dashboard page
-         */
-      } else if (response.status === 400) {
-        /**
-         * TODO:Create Toast to show Error we have
-         */
-
+        navigate("/chat");
+      } else {
+        //check error type
         if (typeof response.data.message === "string") {
-          /**
-           * TODO:Create toast to show the error message as string in toast
-           */
+          //show error with taost
+          toast.error(response.data.message);
         } else {
           //entred inputs are wrong add it to error data to show to user
           setError({
             ...response.data.message,
           });
         }
-      } else {
-        /**
-         * TODO:Handle More Status Code Errors
-         */
       }
     } catch (error) {
       console.log("error in login error:> \n", error);
     }
+
+    setIsBtnLoading(false);
   };
 
   const httpGoogleAuthentication = async () => {
@@ -96,6 +102,7 @@ export default function Login({ onToggleHandler }) {
       <div className="w-full flex flex-col gap-4 mt-6 mb-2">
         <ChatAppButton
           clickHandler={httpOnLoginUserHandler}
+          isLoading={isBtnLoading}
           bgColor={"#006CFF"}
           textColor={"#fff"}
         >

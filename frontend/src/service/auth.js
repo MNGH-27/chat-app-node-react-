@@ -2,8 +2,8 @@ import useFetch from "./../hooks/useFetch";
 
 const endPoint = "auth";
 
-export async function SignupUser({ password, email, name }) {
-  const apiCall = await useFetch().post(`${endPoint}/signup`, {
+export async function SignupUser(navigate, { password, email, name }) {
+  const apiCall = await useFetch(navigate).post(`${endPoint}/signup`, {
     password,
     email,
     name,
@@ -12,8 +12,8 @@ export async function SignupUser({ password, email, name }) {
   return apiCall;
 }
 
-export async function LoginUser({ password, name }) {
-  const apiCall = await useFetch().post(`${endPoint}/login`, {
+export async function LoginUser(navigate, { password, name }) {
+  const apiCall = await useFetch(navigate).post(`${endPoint}/login`, {
     password,
     name,
   });
@@ -21,8 +21,8 @@ export async function LoginUser({ password, name }) {
   return apiCall;
 }
 
-export async function GoogleAuthentication() {
-  const apiCall = await useFetch().post(`${endPoint}/google`);
+export async function GoogleAuthentication(navigate = null) {
+  const apiCall = await useFetch(navigate).post(`${endPoint}/google`);
 
   return apiCall;
 }
