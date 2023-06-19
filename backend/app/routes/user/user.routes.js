@@ -7,13 +7,14 @@ const userController = require("./../../controller/user/user.controller");
 const userRouter = express.Router();
 
 /**
- * ! end point  :> /
+ * ! end point  :> /user
  *
  * @ routes :>
  *
  *
  */
 
-userRouter.use("/", userController.GetUser);
+userRouter.get("/", userController.GetUser);
+userRouter.get("/receiver", userController.GetUserByName);
 
 module.exports = userRouter;

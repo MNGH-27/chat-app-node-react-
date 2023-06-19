@@ -76,11 +76,11 @@ class user {
     );
   }
 
-  //use in passport.js
-  static async GetSingleUserByName(name) {
+  //use in passport.js, usercontroller
+  static async GetSingleUserByName(name, projection = {}) {
     return await new Promise((res, rej) =>
       userSchema
-        .findOne({ name })
+        .findOne({ name }, projection)
         .then((response) => {
           res(response);
         })

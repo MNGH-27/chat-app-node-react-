@@ -69,7 +69,9 @@ module.exports.login = function (req, res) {
 
   if (error) {
     //return sepreted error to user
-    return res.status(400).send(errorMessageSeparator(error.details));
+    return res
+      .status(400)
+      .send({ message: errorMessageSeparator(error.details) });
   }
 
   //validate in passport js
