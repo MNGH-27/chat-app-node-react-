@@ -1,8 +1,11 @@
 var express = require("express");
-var router = express.Router();
-var jwt = require("express-jwt");
 
-// var ctrlProfile = require("../controllers/profile");
-var ctrlAuth = require("./../../controller/authentication/auth.controller");
+//import chatController
+var chatController = require("./../../controller/chat/chat.controller");
 
-module.exports = router;
+//define chatRouter
+const chatRouter = express.Router();
+
+chatRouter.post("/", chatController.PostNewMessageHandler);
+
+module.exports = chatRouter;

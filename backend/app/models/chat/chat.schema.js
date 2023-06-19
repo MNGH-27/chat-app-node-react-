@@ -15,11 +15,11 @@ const MessageSchema = mongoose.Schema({
   contentType: {
     type: String,
   },
-  receiver: {
-    type: userSchema,
+  receiverId: {
+    type: Number,
   },
-  sender: {
-    type: userSchema,
+  senderId: {
+    type: Number,
   },
 });
 
@@ -29,11 +29,11 @@ const ChatSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
-  receiver: {
-    type: userSchema,
+  receiverId: {
+    type: Number,
   },
-  sender: {
-    type: userSchema,
+  senderId: {
+    type: Number,
   },
 });
 
