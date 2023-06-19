@@ -53,17 +53,24 @@ export default function ChatSideBar() {
           </span>
         </div>
       </div>
-      {isShowFindUserModal && (
-        <FindUserModal closeModalHandler={onCloseModalHandler} />
-      )}
-      {receiver.name && (
-        <ShowReceiverModal
-          closeModalHandler={() => {
-            setReceiver({});
-          }}
-          receiver={receiver}
-        />
-      )}
+
+      {
+        //modal for find user to text
+        isShowFindUserModal && (
+          <FindUserModal closeModalHandler={onCloseModalHandler} />
+        )
+      }
+      {
+        //modal after user found (show detail of user and option to text user)
+        receiver?.name && (
+          <ShowReceiverModal
+            closeModalHandler={() => {
+              setReceiver({});
+            }}
+            receiver={receiver}
+          />
+        )
+      }
     </>
   );
 }
