@@ -27,6 +27,13 @@ async function GetUserByName(req, res) {
       .send({ message: errorMessageSeparator(error.details) });
   }
 
+  //check if requested user be equal to current user
+  if (req.user.name === value.name) {
+    res.status(401).send({
+      message: "you can't message to your self",
+    });
+  }
+
   try {
     const findedUser = await User.GetSingleUserByName(value.name, {
       password: 0,

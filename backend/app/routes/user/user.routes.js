@@ -10,7 +10,8 @@ const userRouter = express.Router();
  * ! end point  :> /user
  *
  * @ routes :>
- *
+ *      / => get current users data
+ *      /receiver => for request for other users data to start chat
  *
  */
 
