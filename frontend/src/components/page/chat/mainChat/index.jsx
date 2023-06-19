@@ -1,11 +1,14 @@
+//HOC
+import WithReceiver from "../../../hoc/withReceiver";
+
 //Svg
 import { ReactComponent as ArrowRight2 } from "./../../../../assets/svg/arrowRight(2).svg";
 
-function MainChat() {
+function MainChat({ receiver }) {
   return (
     <div className="col-span-2 flex flex-col border-l border-[#004CCC]">
       <div className="p-3 border-b border-[#004CCC] flex items-center justify-between w-full">
-        <span className="text-xl">user name</span>
+        <span className="text-xl">{receiver.name}</span>
         <span className="text-sm text-[#8A898E]">last seen recently</span>
       </div>
 
@@ -24,4 +27,4 @@ function MainChat() {
   );
 }
 
-export default MainChat;
+export default WithReceiver(MainChat);

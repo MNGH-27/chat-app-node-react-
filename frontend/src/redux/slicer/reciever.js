@@ -3,11 +3,11 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   name: "",
   email: "",
-  role: "",
+  id: "",
 };
 
 export const receiverSlice = createSlice({
-  name: "user",
+  name: "receiver",
   initialState,
   reducers: {
     addNewReceiver: (state, action) => {
