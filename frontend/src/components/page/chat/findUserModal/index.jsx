@@ -6,6 +6,8 @@ import { toast } from "react-toastify";
 //react router dom
 import { useNavigate } from "react-router-dom";
 
+//redux
+import { useSelector } from "react-redux";
 //services
 import { GetReceiver } from "../../../../service/user";
 
@@ -15,6 +17,9 @@ import ChatAppButton from "../../../util/button";
 import ModalWrapper from "../../../common/modalWrapper";
 
 export default function FindUserModal({ closeModalHandler }) {
+  //redux
+  const user = useSelector((state) => state.user);
+
   //navigate
   const navigate = useNavigate();
 
@@ -24,12 +29,23 @@ export default function FindUserModal({ closeModalHandler }) {
   const [error, setError] = useState("");
 
   const onSetDataSchemaHandler = (target, value) => {
+    //check value if be equal to current user
+    if (value === user.name) {
+      setError("you can't message to your self");
+    } else {
+      //clear error
+      setError("");
+    }
+
     setName(value);
   };
 
   const httpFindUser = async () => {
-    //clear error status
-    setError("");
+    //check value if be equal to current user
+    if (name === user.name) {
+      setError("you can't message to your self");
+      return;
+    }
 
     setIsBtnLoading(true);
     try {
