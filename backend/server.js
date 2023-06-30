@@ -2,13 +2,20 @@ require("dotenv").config();
 
 const http = require("http");
 
-//import app(express()) from  app.js
+//app
 const app = require("./app");
 
+//socekt IO
+const { socketInit } = require("./socket");
+
+//define port
 const PORT = process.env.PORT || 5000;
 
 //create server on app
 const server = http.createServer(app);
+
+//define socket
+socketInit(server);
 
 //function of starting backend project
 async function startServer() {
