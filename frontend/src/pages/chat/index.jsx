@@ -15,7 +15,7 @@ function Chat({ user }) {
         <ChatSideBar />
 
         {/* col-span-2 */}
-        <MainChat />
+        <MainChat user={user} />
       </div>
     </div>
   );

@@ -26,7 +26,10 @@ export default function WithReceiver(WrappedComponent) {
 
     useEffect(() => {
       //check if there is receiver
-      if (receiver._id !== "") {
+
+      console.log("receiver._id :", receiver._id);
+
+      if (receiver._id) {
         //there is receiver => send request room
         httpGetRoom();
       }
