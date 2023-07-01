@@ -10,7 +10,7 @@ import io from "socket.io-client";
 
 const socket = io.connect("http://localhost:5000");
 
-function MainChat({ receiver }) {
+function MainChat({ receiver, room }) {
   return (
     <div className="col-span-2 flex flex-col border-l border-[#004CCC]">
       <div className="p-3 border-b border-[#004CCC] flex items-center justify-between w-full">
