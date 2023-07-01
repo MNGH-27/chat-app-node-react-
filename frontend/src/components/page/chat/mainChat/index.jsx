@@ -1,8 +1,14 @@
 //HOC
+import { useEffect } from "react";
 import WithReceiver from "../../../hoc/withReceiver";
 
 //Svg
 import { ReactComponent as ArrowRight2 } from "./../../../../assets/svg/arrowRight(2).svg";
+
+//socket-io
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:5000");
 
 function MainChat({ receiver }) {
   return (
@@ -11,7 +17,7 @@ function MainChat({ receiver }) {
         <span className="text-xl">{receiver.name}</span>
         <span className="text-sm text-[#8A898E]">last seen recently</span>
       </div>
-      {/* box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px; */}
+
       <div className="h-full p-3">
         <EmptyChat />
       </div>

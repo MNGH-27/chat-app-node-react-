@@ -5,8 +5,8 @@ const http = require("http");
 //app
 const app = require("./app");
 
-//socekt IO
-const { socketInit } = require("./socket");
+//require socket io file
+const socketHandler = require("./socket");
 
 //define port
 const PORT = process.env.PORT || 5000;
@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 const server = http.createServer(app);
 
 //define socket
-socketInit(server);
+socketHandler(server);
 
 //function of starting backend project
 async function startServer() {

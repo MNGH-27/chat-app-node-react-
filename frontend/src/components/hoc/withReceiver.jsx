@@ -9,6 +9,8 @@ export default function WithReceiver(WrappedComponent) {
     //redux
     const receiver = useSelector((state) => state.receiver);
 
+    //fetch both users message
+
     return receiver.name.length > 0 ? (
       <WrappedComponent {...props} receiver={receiver} />
     ) : (

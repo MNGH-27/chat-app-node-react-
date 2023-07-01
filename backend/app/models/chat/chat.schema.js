@@ -21,9 +21,12 @@ const MessageSchema = mongoose.Schema({
   senderId: {
     type: Number,
   },
+  chatId: {
+    type: Number,
+  },
 });
 
-const ChatSchema = mongoose.Schema({
+const RoomSchema = mongoose.Schema({
   _id: { type: Number, default: 0 },
   createdAt: {
     type: Date,
@@ -58,11 +61,11 @@ const FileSchema = mongoose.Schema({
 });
 
 const messageSchema = mongoose.model("Message", MessageSchema);
-const chatSchema = mongoose.model("Chat", ChatSchema);
+const roomSchema = mongoose.model("Room", RoomSchema);
 const fileSchema = mongoose.model("File", FileSchema);
 
 module.exports = {
   messageSchema,
-  chatSchema,
+  roomSchema,
   fileSchema,
 };
