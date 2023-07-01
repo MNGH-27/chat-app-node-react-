@@ -1,14 +1,78 @@
 const { response } = require("express");
 const { messageSchema, roomSchema, fileSchema } = require("./chat.schema");
 
-class Message {}
-
-class Room {
-  constructor(recieverId, senderId, id, createdAt) {
+class Message {
+  constructor(recieverId, senderId, id, createAt, text, contentType, roomId) {
     this.recieverId = recieverId;
     this.senderId = senderId;
     this.id = id;
-    this.createdAt = createdAt;
+    this.createAt = createAt;
+    this.text = text;
+    this.contentType = contentType;
+    this.roomId = roomId;
+  }
+
+  async CreateNewMessage(
+    roomId,
+    senderId,
+    receiverId,
+    createAt,
+    text,
+    contentType
+  ) {
+    //get number of message in current room we are create
+    const numberOfMessage = await this.getMessageOfRoomCount(roomId);
+
+    return await new Promise((res, rej) => {
+      messageSchema
+        .create({
+          _id: numberOfMessage,
+          roomId,
+          senderId,
+          receiverId,
+          createAt,
+          text,
+          contentType,
+        })
+        .then((response) => {
+          //return result as response
+          res({
+            id: response._id,
+            senderId: response.senderId,
+            receiverId: response.receiverId,
+            createAt: response.createAt,
+          });
+        })
+        .catch((err) => {
+          //catch error if there would be error
+          rej(err);
+        });
+    });
+  }
+
+  async getMessageOfRoomCount(roomId) {
+    //request for number of data
+    return await new Promise((res, rej) =>
+      roomSchema
+        .count({ roomId })
+        .then((roomCount) => {
+          //return number of room as response of promise
+          res(roomCount);
+        })
+        .catch((err) => {
+          //return error if we catch it
+          rej(err);
+        })
+    );
+  }
+}
+
+class Room {
+  constructor(recieverId, senderId, id, createAt) {
+    this.recieverId = recieverId;
+    this.senderId = senderId;
+    this.id = id;
+    this.createAt = createAt;
   }
 
   async checkRoomExist(senderId, receiverId) {
@@ -25,7 +89,7 @@ class Room {
             id: response._id,
             senderId: response.senderId,
             receiverId: response.receiverId,
-            createdAt: response.createdAt,
+            createAt: response.createAt,
           });
         })
         .catch((err) => {
@@ -34,7 +98,7 @@ class Room {
     });
   }
 
-  async createNewRoom(senderId, receiverId, createdAt) {
+  async createNewRoom(senderId, receiverId, createAt) {
     //get number of room
     const roomCount = await this.getRoomCount();
 
@@ -44,7 +108,7 @@ class Room {
           _id: roomCount,
           senderId: senderId,
           receiverId,
-          createdAt,
+          createAt,
         })
         .then((response) => {
           //return result as response

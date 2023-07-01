@@ -4,7 +4,7 @@ const userSchema = require("./../user/user.schema");
 
 const MessageSchema = mongoose.Schema({
   _id: { type: Number, default: 0 },
-  createdAt: {
+  createAt: {
     type: Date,
     default: Date.now,
   },
@@ -21,14 +21,14 @@ const MessageSchema = mongoose.Schema({
   senderId: {
     type: Number,
   },
-  chatId: {
+  roomId: {
     type: Number,
   },
 });
 
 const RoomSchema = mongoose.Schema({
   _id: { type: Number, default: 0 },
-  createdAt: {
+  createAt: {
     type: Date,
     default: Date.now,
   },
@@ -42,7 +42,7 @@ const RoomSchema = mongoose.Schema({
 
 const FileSchema = mongoose.Schema({
   _id: { type: Number, default: 0 },
-  createdAt: {
+  createAt: {
     type: Date,
     default: Date.now,
   },
