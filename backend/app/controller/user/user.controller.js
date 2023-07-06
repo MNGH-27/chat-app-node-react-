@@ -51,7 +51,11 @@ async function GetUserByName(req, res) {
       });
     } else {
       //send user
-      res.send(findedUser);
+      res.send({
+        id: findedUser._id,
+        name: findedUser.name,
+        email: findedUser.email,
+      });
     }
   } catch (error) {
     console.log("error in GetUserByName => ", error);

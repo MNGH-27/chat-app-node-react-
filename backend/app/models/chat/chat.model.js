@@ -89,6 +89,9 @@ class Room {
   }
 
   async checkRoomExist(senderId, receiverId) {
+    console.log("senderId :", senderId);
+    console.log("receiverId :", receiverId);
+
     return await new Promise((res, rej) => {
       roomSchema
         .findOne({
@@ -98,12 +101,16 @@ class Room {
           ],
         })
         .then((response) => {
-          res({
-            id: response._id,
-            senderId: response.senderId,
-            receiverId: response.receiverId,
-            createAt: response.createAt,
-          });
+          if (response === null) {
+            res(response);
+          } else {
+            res({
+              id: response._id,
+              senderId: response.senderId,
+              receiverId: response.receiverId,
+              createAt: response.createAt,
+            });
+          }
         })
         .catch((err) => {
           rej(err);
@@ -112,13 +119,9 @@ class Room {
   }
 
   async createNewRoom(senderId, receiverId, createAt) {
-    //get number of room
-    const roomCount = await this.getRoomCount();
-
     return await new Promise((res, rej) => {
       roomSchema
         .create({
-          _id: roomCount,
           senderId: senderId,
           receiverId,
           createAt,
@@ -137,22 +140,6 @@ class Room {
           rej(err);
         });
     });
-  }
-
-  async getRoomCount() {
-    //request for number of data
-    return await new Promise((res, rej) =>
-      roomSchema
-        .count({})
-        .then((roomCount) => {
-          //return number of room as response of promise
-          res(roomCount);
-        })
-        .catch((err) => {
-          //return error if we catch it
-          rej(err);
-        })
-    );
   }
 }
 

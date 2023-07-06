@@ -62,12 +62,7 @@ class user {
       userSchema
         .findOne({ name }, projection)
         .then((response) => {
-          res({
-            id: response._id,
-            name: response.name,
-            email: response.email,
-            token,
-          });
+          res(response);
         })
         .catch((err) => {
           rej(err);

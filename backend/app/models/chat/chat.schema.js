@@ -14,32 +14,30 @@ const MessageSchema = mongoose.Schema({
     type: String,
   },
   receiverId: {
-    type: Number,
+    type: String,
   },
   senderId: {
-    type: Number,
+    type: String,
   },
   roomId: {
-    type: Number,
+    type: String,
   },
 });
 
 const RoomSchema = mongoose.Schema({
-  _id: { type: Number, default: 0 },
   createAt: {
     type: Date,
     default: Date.now,
   },
   receiverId: {
-    type: Number,
+    type: String,
   },
   senderId: {
-    type: Number,
+    type: String,
   },
 });
 
 const FileSchema = mongoose.Schema({
-  _id: { type: Number, default: 0 },
   createAt: {
     type: Date,
     default: Date.now,

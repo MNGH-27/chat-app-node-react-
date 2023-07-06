@@ -72,6 +72,8 @@ async function CreateNewRoom(req, res) {
       new Date()
     );
 
+    console.log("newRoom : ", newRoom);
+
     //return saved room
     return res.status(201).send(newRoom);
   } catch (error) {
