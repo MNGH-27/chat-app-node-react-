@@ -1,9 +1,7 @@
 const mongoose = require("mongoose");
-
 const userSchema = require("./../user/user.schema");
 
 const MessageSchema = mongoose.Schema({
-  _id: { type: Number, default: 0 },
   createAt: {
     type: Date,
     default: Date.now,

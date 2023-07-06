@@ -16,7 +16,7 @@ export default function WithReceiver(WrappedComponent) {
   const WithReceiverComponent = (props) => {
     //state
     const [room, setRoom] = useState({});
-    const [message, setMessage] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
     //navigation
     const navigate = useNavigate();
@@ -26,9 +26,6 @@ export default function WithReceiver(WrappedComponent) {
 
     useEffect(() => {
       //check if there is receiver
-
-      console.log("receiver._id :", receiver._id);
-
       if (receiver._id) {
         //there is receiver => send request room
         httpGetRoom();
@@ -37,6 +34,8 @@ export default function WithReceiver(WrappedComponent) {
 
     //fetch both users message
     const httpGetRoom = async () => {
+      setIsLoading(true);
+
       try {
         const response = await GetRoom(navigate, { receiverId: receiver._id });
 
@@ -50,11 +49,12 @@ export default function WithReceiver(WrappedComponent) {
           //fetch first 20 message and send with props
         } else if (response.status === 404) {
           //there is no any room create new Room
-          httpCreateNewRoom();
+          await httpCreateNewRoom();
         }
       } catch (error) {
         console.log("error in get room : ", error);
       }
+      setIsLoading(false);
     };
 
     const httpCreateNewRoom = async () => {
@@ -76,7 +76,9 @@ export default function WithReceiver(WrappedComponent) {
     };
 
     return receiver.name.length > 0 ? (
-      <WrappedComponent {...props} receiver={receiver} room={room} />
+      !isLoading && (
+        <WrappedComponent {...props} receiver={receiver} room={room} />
+      )
     ) : (
       <div className="col-span-2 h-full space-y-2 flex flex-col items-center justify-center border-l border-[#004CCC] ">
         <ChatSvg className="w-20" />

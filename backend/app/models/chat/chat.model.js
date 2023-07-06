@@ -1,4 +1,3 @@
-const { response } = require("express");
 const { messageSchema, roomSchema, fileSchema } = require("./chat.schema");
 
 class Message {
@@ -12,7 +11,7 @@ class Message {
     this.roomId = roomId;
   }
 
-  async CreateNewMessage(
+  async createNewMessage(
     roomId,
     senderId,
     receiverId,
@@ -20,13 +19,9 @@ class Message {
     text,
     contentType
   ) {
-    //get number of message in current room we are create
-    const numberOfMessage = await this.getMessageOfRoomCount(roomId);
-
     return await new Promise((res, rej) => {
       messageSchema
         .create({
-          _id: numberOfMessage,
           roomId,
           senderId,
           receiverId,
@@ -35,16 +30,36 @@ class Message {
           contentType,
         })
         .then((response) => {
+          console.log("response  : ", response);
+
           //return result as response
           res({
             id: response._id,
             senderId: response.senderId,
             receiverId: response.receiverId,
             createAt: response.createAt,
+            text: response.text,
           });
         })
         .catch((err) => {
           //catch error if there would be error
+
+          console.log("error  : ", err);
+
+          rej(err);
+        });
+    });
+  }
+
+  async getAllMessagesOfRoom(roomId) {
+    return await new Promise((res, rej) => {
+      messageSchema
+        .find({ roomId })
+        .sort({})
+        .then((response) => {
+          res(response);
+        })
+        .catch((err) => {
           rej(err);
         });
     });
@@ -54,7 +69,7 @@ class Message {
     //request for number of data
     return await new Promise((res, rej) =>
       roomSchema
-        .count({ roomId })
+        .count({})
         .then((roomCount) => {
           //return number of room as response of promise
           res(roomCount);

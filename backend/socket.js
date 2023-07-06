@@ -14,8 +14,6 @@ function serverHandler(server) {
 
   //handle on connect to server
   io.on("connection", (socket) => {
-    console.log("conected to server");
-
     socket.on("joinRoom", (roomId) => {
       //create room with roomId
       socket.join(roomId);
@@ -25,8 +23,10 @@ function serverHandler(server) {
       //save message in DB
       const message = new Message();
 
+      console.log("in the new message");
+
       try {
-        const newMessage = message.CreateNewMessage(
+        const newMessage = await message.createNewMessage(
           data.roomId,
           data.senderId,
           data.receiverId,
@@ -34,6 +34,8 @@ function serverHandler(server) {
           data.message,
           "text"
         );
+
+        console.log("this is new MEssage : ", newMessage);
       } catch (error) {
         console.log("error in save new Message :", error);
 
