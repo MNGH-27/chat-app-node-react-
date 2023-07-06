@@ -6,7 +6,10 @@ import { useNavigate } from "react-router-dom";
 //service
 import { GetAllMessages } from "../../../../../service/message";
 
-function ChatContainer({ roomId }) {
+//component
+import SingleMessage from "../singleMessage";
+
+function ChatContainer({ roomId, userId, socket }) {
   //state
   const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState([]);
@@ -19,12 +22,31 @@ function ChatContainer({ roomId }) {
     httpGetPrevChat();
   }, []);
 
+  //messageResponse Handler
+  useEffect(() => {
+    socket.on("messageResponse", (data) => {
+      console.log("data : ", data);
+
+      setMessages((prevState) => [...prevState, data.data]);
+    });
+  }, [socket]);
+
+  //newMessageFrom Other User Handler
+  // useEffect(() => {
+  //   socket.on("receiveMessage", (data) => {
+  //     setMessages((prevState) => [...prevState, data]);
+  //   });
+  // }, [socket]);
+
   const httpGetPrevChat = async () => {
     setIsLoading(true);
     try {
       const response = await GetAllMessages(navigate, { roomId });
 
-      console.log("response : ", response);
+      //check response status
+      if (response.status === 200) {
+        setMessages([...response.data]);
+      }
     } catch (error) {
       console.log("error in get prev chat :", error);
     }
@@ -41,7 +63,13 @@ function ChatContainer({ roomId }) {
         messages.length === 0 ? (
           <EmptyChat />
         ) : (
-          <></>
+          messages.map((singleMessage, index) => (
+            <SingleMessage
+              key={index}
+              message={singleMessage}
+              userId={userId}
+            />
+          ))
         )
       }
     </div>

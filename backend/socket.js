@@ -35,12 +35,23 @@ function serverHandler(server) {
           "text"
         );
 
-        console.log("this is new MEssage : ", newMessage);
+        //return response of newMessage
+        socket.emit("messageResponse", {
+          hasError: false,
+          data: {
+            ...newMessage,
+          },
+        });
       } catch (error) {
         console.log("error in save new Message :", error);
 
         //send error to this room
-        socket.to(data.roomId).emit("error", error);
+        socket.emit("messageResponse", {
+          hasError: false,
+          data: {
+            ...error,
+          },
+        });
       }
 
       //send message to receiver too

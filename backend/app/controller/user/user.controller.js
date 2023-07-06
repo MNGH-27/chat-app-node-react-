@@ -7,10 +7,10 @@ const User = require("../../models/user/user.model");
 function GetUser(req, res) {
   //here we get data from token in cookie
   res.status(200).send({
-    name: req.name,
-    email: req.email,
-    role: req.role,
-    id: req._id,
+    name: req.user.name,
+    email: req.user.email,
+    role: req.user.role,
+    id: req.user._id,
   });
 }
 

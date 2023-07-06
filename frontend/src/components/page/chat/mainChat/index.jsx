@@ -16,6 +16,7 @@ const socket = io.connect("http://localhost:5000");
 
 function MainChat({ user, receiver, room }) {
   const [message, setMessage] = useState("");
+  const [isBtnLoading, setIsBtnLoading] = useState(false);
 
   //join room in mount component
   useEffect(() => {
@@ -23,10 +24,17 @@ function MainChat({ user, receiver, room }) {
     socket.emit("joinRoom", room.id);
   }, []);
 
-  console.log("user : ", user);
-  console.log("receiver : ", receiver);
+  //messageResponse Handler
+  useEffect(() => {
+    socket.on("messageResponse", (data) => {
+      setIsBtnLoading(false);
+      // console.log("received response:", data.message);
+    });
+  }, [socket]);
 
   const onSendMessageHandler = () => {
+    setIsBtnLoading(true);
+
     //check if there is message
     if (message.trim().length === 0) {
       toast.error("message can't be empty");
@@ -37,9 +45,12 @@ function MainChat({ user, receiver, room }) {
     socket.emit("newMessage", {
       roomId: room.id,
       senderId: user.id,
-      receiver: receiver.id,
+      receiverId: receiver.id,
       message,
     });
+
+    //clear message
+    setMessage("");
   };
 
   return (
@@ -49,7 +60,7 @@ function MainChat({ user, receiver, room }) {
         <span className="text-sm text-[#8A898E]">last seen recently</span>
       </div>
 
-      <ChatContainer roomId={room.id} />
+      <ChatContainer socket={socket} userId={user.id} roomId={room.id} />
 
       <div className="p-2 border-t border-[#004CCC] flex items-center justify-between gap-3 w-full h-fit">
         <textarea
@@ -58,12 +69,16 @@ function MainChat({ user, receiver, room }) {
           className="w-full bg-[#0C0E12] h-[65px] resize-none outline-none rounded-md placeholder:text-[#43527C] p-2"
           placeholder="Say something"
         />
-        <button
-          onClick={onSendMessageHandler}
-          className="bg-[#1C1F27] text-[#004CCC] hover:bg-[#004CCC] hover:text-white duration-200 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl"
-        >
-          <ArrowRight2 />
-        </button>
+        {isBtnLoading ? (
+          <p> button is loading </p>
+        ) : (
+          <button
+            onClick={onSendMessageHandler}
+            className="bg-[#1C1F27] text-[#004CCC] hover:bg-[#004CCC] hover:text-white duration-200 flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl"
+          >
+            <ArrowRight2 />
+          </button>
+        )}
       </div>
     </div>
   );
