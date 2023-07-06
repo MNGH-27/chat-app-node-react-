@@ -26,7 +26,7 @@ export default function WithReceiver(WrappedComponent) {
 
     useEffect(() => {
       //check if there is receiver
-      if (receiver._id) {
+      if (receiver.id) {
         //there is receiver => send request room
         httpGetRoom();
       }
@@ -37,7 +37,7 @@ export default function WithReceiver(WrappedComponent) {
       setIsLoading(true);
 
       try {
-        const response = await GetRoom(navigate, { receiverId: receiver._id });
+        const response = await GetRoom(navigate, { receiverId: receiver.id });
 
         //check response status
         if (response.status === 200) {
@@ -60,7 +60,7 @@ export default function WithReceiver(WrappedComponent) {
     const httpCreateNewRoom = async () => {
       try {
         const response = await CreateNewRoom(navigate, {
-          receiverId: receiver._id,
+          receiverId: receiver.id,
         });
 
         //check response status

@@ -33,7 +33,7 @@ function MainChat({ user, receiver, room }) {
     //send message with new message
     socket.emit("newMessage", {
       roomId: room.id,
-      senderId: user._id,
+      senderId: user.id,
       receiver: receiver.id,
       message,
     });

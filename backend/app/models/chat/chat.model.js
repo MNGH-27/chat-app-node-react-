@@ -30,8 +30,6 @@ class Message {
           contentType,
         })
         .then((response) => {
-          console.log("response  : ", response);
-
           //return result as response
           res({
             id: response._id,
