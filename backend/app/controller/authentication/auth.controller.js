@@ -101,7 +101,6 @@ module.exports.login = function (req, res) {
         email: user.email,
         name: user.name,
         role: user.role,
-        token: token,
       });
     } else {
       // If user is not found

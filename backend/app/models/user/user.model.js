@@ -22,14 +22,10 @@ class user {
     //create password for user =>
     const { hash, salt } = setPassword(this.password);
 
-    //request for getting the number of user
-    let userCount = await this.getUserCount();
-
     //request for save the new user
     return await new Promise((res, rej) =>
       userSchema
         .create({
-          _id: userCount,
           name: this.name,
           password: this.password,
           email: this.email,
@@ -47,30 +43,14 @@ class user {
 
           //return result as response
           res({
+            id: response._id,
             name: response.name,
             email: response.email,
-            id: response._id,
             token,
           });
         })
         .catch((err) => {
           //catch error if there would be error
-          rej(err);
-        })
-    );
-  }
-
-  async getUserCount() {
-    //request for number of data
-    return await new Promise((res, rej) =>
-      userSchema
-        .count({})
-        .then((userCount) => {
-          //return number of users as response of promise
-          res(userCount);
-        })
-        .catch((err) => {
-          //return error if we catch it
           rej(err);
         })
     );
@@ -82,7 +62,12 @@ class user {
       userSchema
         .findOne({ name }, projection)
         .then((response) => {
-          res(response);
+          res({
+            id: response._id,
+            name: response.name,
+            email: response.email,
+            token,
+          });
         })
         .catch((err) => {
           rej(err);
