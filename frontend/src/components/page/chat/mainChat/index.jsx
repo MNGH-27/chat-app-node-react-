@@ -23,6 +23,9 @@ function MainChat({ user, receiver, room }) {
     socket.emit("joinRoom", room.id);
   }, []);
 
+  console.log("user : ", user);
+  console.log("receiver : ", receiver);
+
   const onSendMessageHandler = () => {
     //check if there is message
     if (message.trim().length === 0) {

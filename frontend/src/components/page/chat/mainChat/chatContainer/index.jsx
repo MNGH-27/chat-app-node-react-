@@ -19,8 +19,6 @@ function ChatContainer({ roomId }) {
     httpGetPrevChat();
   }, []);
 
-  console.log("roomId : ", roomId);
-
   const httpGetPrevChat = async () => {
     setIsLoading(true);
     try {
